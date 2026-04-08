@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Django Test</title>
+    <style>
+        body { font-family: Arial; background: #111; color: white; }
+        .container { width: 80%; margin: auto; }
+        .card {
+            background: #222;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        img {
+            max-width: 200px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Models</h1>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

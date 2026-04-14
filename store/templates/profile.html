@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="profile-wrapper">
+    <div class="profile-header">
+        <h1>Особистий кабінет</h1>
+        <a href="{% url 'logout' %}" class="btn-logout">Вийти</a>
+    </div>
+
+    <div class="profile-columns">
+        <div class="profile-section">
+            <h2>Особиста інформація</h2>
+            <p class="profile-email">Email: <span>{{ request.user.email }}</span></p>
+            {% if profile_saved %}
+                <div class="alert-success">Дані успішно збережено.</div>
+            {% endif %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_first_name">Ім'я</label>
+                    <input type="text" name="first_name" id="id_first_name"
+                           value="{{ profile_form.first_name.value|default:'' }}"
+                           placeholder="Ваше ім'я">
+                    {% if profile_form.first_name.errors %}
+                        <div class="field-errors">{{ profile_form.first_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name">Прізвище</label>
+                    <input type="text" name="last_name" id="id_last_name"
+                           value="{{ profile_form.last_name.value|default:'' }}"
+                           placeholder="Ваше прізвище">
+                    {% if profile_form.last_name.errors %}
+                        <div class="field-errors">{{ profile_form.last_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_gender">Стать</label>
+                    <select name="gender" id="id_gender">
+                        {% for value, label in profile_form.fields.gender.choices %}
+                            <option value="{{ value }}"
+                                {% if profile_form.gender.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if profile_form.gender.errors %}
+                        <div class="field-errors">{{ profile_form.gender.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_phone">Номер телефону</label>
+                    <input type="tel" name="phone" id="id_phone"
+                           value="{{ profile_form.phone.value|default:'' }}"
+                           placeholder="+380 XX XXX XX XX">
+                    {% if profile_form.phone.errors %}
+                        <div class="field-errors">{{ profile_form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_address">Адреса доставки</label>
+                    <textarea name="address" id="id_address" rows="3"
+                              placeholder="Вулиця, будинок, квартира, місто">{{ profile_form.address.value|default:'' }}</textarea>
+                    {% if profile_form.address.errors %}
+                        <div class="field-errors">{{ profile_form.address.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" name="update_profile" class="btn-submit">Зберегти</button>
+            </form>
+        </div>
+        <div class="profile-section">
+            <h2>Змінити пароль</h2>
+            {% if password_saved %}
+                <div class="alert-success">Пароль успішно змінено.</div>
+            {% endif %}
+            {% if password_form.non_field_errors %}
+                <div class="form-non-field-errors">
+                    {% for error in password_form.non_field_errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_old_password">Поточний пароль</label>
+                    <input type="password" name="old_password" id="id_old_password"
+                           placeholder="Введіть поточний пароль" autocomplete="current-password">
+                    {% if password_form.old_password.errors %}
+                        <div class="field-errors">{{ password_form.old_password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_new_password">Новий пароль</label>
+                    <input type="password" name="new_password" id="id_new_password"
+                           placeholder="Мінімум 8 символів, літери і цифри" autocomplete="new-password">
+                    {% if password_form.new_password.errors %}
+                        <div class="field-errors">{{ password_form.new_password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_new_password2">Підтвердження нового паролю</label>
+                    <input type="password" name="new_password2" id="id_new_password2"
+                           placeholder="Повторіть новий пароль" autocomplete="new-password">
+                    {% if password_form.new_password2.errors %}
+                        <div class="field-errors">{{ password_form.new_password2.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" name="change_password" class="btn-submit">Змінити пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="{% url 'product_list' %}" class="btn-reset">← Повернутись до магазину</a>
+</div>
+{% endblock %}

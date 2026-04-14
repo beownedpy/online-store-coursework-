@@ -1,0 +1,396 @@
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #222;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-wrapper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.card {
+    display: block;
+    flex: 1;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 14px;
+}
+
+.card-body h2 {
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: ;
+}
+
+.card-category {
+    font-size: 12px;
+    color: #0070f3;
+    margin-bottom: 4px;
+}
+
+.card-meta {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.card-price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.empty-message {
+    color: #666;
+    font-size: 16px;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.card-actions {
+    display: flex;
+    align-items: stretch;
+}
+
+.btn-add-cart {
+    flex: 1;
+    padding: 12px 0;
+    margin: 0;
+    background: #0070f3;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-add-cart:hover {
+    background: #005bb5;
+    color: #fff;
+}
+
+.btn-add-cart:active {
+    background: #004999;
+}
+
+/* ── Кнопка серця ── */
+.btn-fav {
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    color: #555;
+    border: none;
+    border-left: 1px solid #333;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.btn-fav svg {
+    transition: fill 0.2s, stroke 0.2s;
+    pointer-events: none;
+}
+
+.btn-fav:hover {
+    color: #e63946;
+    background: #222;
+}
+
+.btn-fav:hover svg {
+    fill: #e63946;
+    stroke: #e63946;
+}
+
+.btn-fav--active {
+    color: #e63946;
+}
+
+.btn-fav--active svg {
+    fill: #e63946;
+    stroke: #e63946;
+}
+
+/* ── Порожній стан (обране / кошик) ── */
+.empty-state {
+    text-align: center;
+    padding: 80px 0;
+}
+
+.empty-state .empty-message {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.btn-to-catalog {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #0070f3;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-to-catalog:hover {
+    background: #005bb5;
+}
+
+/* ── Сторінка деталей товару ── */
+.product-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+
+.detail-gallery {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+}
+
+.detail-image {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #1a1a1a;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detail-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.detail-meta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge-category,
+.badge-gender {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #2a2a2a;
+    color: #aaa;
+    border: 1px solid #333;
+}
+
+.badge-category {
+    color: #0070f3;
+    border-color: #0070f3;
+}
+
+.detail-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+}
+
+.detail-description {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.detail-material {
+    font-size: 14px;
+    color: #ccc;
+    display: flex;
+    gap: 6px;
+}
+
+.detail-label {
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.size-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-size {
+    min-width: 52px;
+    height: 44px;
+    padding: 0 12px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.btn-size:hover:not(.btn-size--out) {
+    border-color: #0070f3;
+    color: #0070f3;
+}
+
+.btn-size--active {
+    border-color: #0070f3 !important;
+    background: #0070f3 !important;
+    color: #fff !important;
+}
+
+.btn-size--out {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.stock-row {
+    margin: 0;
+}
+
+.stock-status {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.stock-in {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.stock-out {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+.cart-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.qty-wrap {
+    display: flex;
+    align-items: center;
+    border: 2px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    width: 38px;
+    height: 44px;
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+.qty-btn:hover {
+    background: #333;
+}
+
+.product-qty {
+    width: 48px;
+    height: 44px;
+    text-align: center;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    font-size: 16px;
+    font-weight: 600;
+    -moz-appearance: textfield;
+}
+
+.product-qty::-webkit-inner-spin-button,
+.product-qty::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.btn-back:hover {
+    color: #fff;
+}
+
+@media (max-width: 680px) {
+    .product-detail {
+        grid-template-columns: 1fr;
+    }
+    .detail-gallery {
+        position: static;
+    }
+}
+
+/* ── Іконка людини в навбарі ── */
+.nav-icon {
+    display: flex;
+    align-items: center;
+    color: #ccc;
+    transition: color 0.15s;
+}
+
+.nav-icon:hover {
+    color: #fff;
+}

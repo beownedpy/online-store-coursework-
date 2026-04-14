@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+.pagination a,
+.pagination .current {
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: #2a2a2a;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #444;
+}
+
+.pagination .current {
+    background: #0070f3;
+    border-color: #0070f3;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    background: #333;
+    border-color: #666;
+}

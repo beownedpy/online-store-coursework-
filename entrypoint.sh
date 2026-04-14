@@ -1,14 +1,16 @@
 #!/bin/sh
+
 set -e
 
-# ── 1. Create Django project if config/settings.py is missing ─────────────────
+
+#Create Django project if config/settings.py is missing
 if [ ! -f "config/settings.py" ]; then
   echo "No Django project found. Creating..."
   django-admin startproject config .
   echo "Project created."
 fi
 
-# ── 2. Create store app if missing ────────────────────────────────────────────
+#Create store app if missing
 if [ ! -d "store" ]; then
   echo "Creating store app..."
   python manage.py startapp store

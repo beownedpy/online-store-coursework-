@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Кошик</h1>
+
+{% if cart|length %}
+<div class="cart-container">
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Варіація</th>
+                <th>Ціна</th>
+                <th>Кількість</th>
+                <th>Сума</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="cart-body">
+            {% for item in cart %}
+            <tr class="cart-row" data-pk="{{ item.variant.pk }}">
+                <td class="cart-product-info">
+                    {% if item.variant.image %}
+                        <img src="{{ item.variant.image.url }}" alt="{{ item.product.title }}" width="60" height="60">
+                    {% endif %}
+                    <a href="{% url 'product_detail' item.product.pk %}">{{ item.product.title }}</a>
+                </td>
+                <td>{{ item.variant.size }} / {{ item.variant.color }}</td>
+                <td>{{ item.variant.price }} грн</td>
+                <td>
+                    <div class="qty-control">
+                        <button class="qty-btn qty-dec" data-pk="{{ item.variant.pk }}">−</button>
+                        <input class="qty-input" type="number" value="{{ item.quantity }}" min="0" max="99" data-pk="{{ item.variant.pk }}">
+                        <button class="qty-btn qty-inc" data-pk="{{ item.variant.pk }}">+</button>
+                    </div>
+                </td>
+                <td class="item-total" data-pk="{{ item.variant.pk }}">{{ item.total_price }} грн</td>
+                <td>
+                    <button class="btn-remove" data-pk="{{ item.variant.pk }}">Видалити</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-footer">
+        <span>Загальна сума:</span>
+        <strong id="cart-total">{{ cart.get_total_price }} грн</strong>
+        <a href="{% url 'product_list' %}" class="btn-reset">← Продовжити покупки</a>
+    </div>
+</div>
+{% else %}
+<p class="empty-message">Кошик порожній. <a href="{% url 'product_list' %}">Перейти до каталогу</a></p>
+{% endif %}
+
+{% endblock %}

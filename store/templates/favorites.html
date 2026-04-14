@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Обране</h1>
+
+{% if favorites %}
+<div class="product-grid">
+    {% for fav in favorites %}
+        {% with product=fav.product first_variant=fav.product.variants.all.0 %}
+        <div class="card-wrapper">
+            <a href="{% url 'product_detail' product.pk %}" class="card">
+                {% if first_variant.image %}
+                    <img src="{{ first_variant.image.url }}" alt="{{ product.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h2>{{ product.title }}</h2>
+                    <p class="card-category">{{ product.get_category_display }}</p>
+                    <p class="card-meta">{{ product.get_gender_display }}</p>
+                    <p class="card-price">
+                        {% if first_variant %}від {{ first_variant.price }} грн{% else %}—{% endif %}
+                    </p>
+                </div>
+            </a>
+            <div class="card-actions">
+                {% if first_variant %}
+                    <button class="btn-add-cart" data-pk="{{ first_variant.pk }}">До кошика</button>
+                {% endif %}
+                <button class="btn-fav-remove btn-fav btn-fav--active"
+                        data-pk="{{ product.pk }}"
+                        data-url="{% url 'favorite_toggle' product.pk %}"
+                        title="Видалити з обраного">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M10 11v6M14 11v6"/>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        {% endwith %}
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state">
+    <p class="empty-message">Ви ще нічого не додали до обраного.</p>
+    <a href="{% url 'product_list' %}" class="btn-to-catalog">Перейти до каталогу</a>
+</div>
+{% endif %}
+{% endblock %}

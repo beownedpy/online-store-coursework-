@@ -1,8 +1,39 @@
 {% extends 'base.html' %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    {% if current_gender or current_category %}
+        <a href="{% url 'product_list' %}">Каталог</a>
+        {% if current_gender %}
+            <span class="breadcrumb-sep">›</span>
+            <a href="{% url 'product_list' %}?gender={{ current_gender }}">
+                {% for val, label in gender_choices %}{% if val == current_gender %}{{ label }}{% endif %}{% endfor %}
+            </a>
+        {% endif %}
+        {% if current_category %}
+            <span class="breadcrumb-sep">›</span>
+            <span>{% for val, label in category_choices %}{% if val == current_category %}{{ label }}{% endif %}{% endfor %}</span>
+        {% endif %}
+    {% else %}
+        <span>Каталог</span>
+    {% endif %}
+</nav>
+{% endblock %}
 {% block content %}
 <h1>Каталог товарів</h1>
 <div class="filters">
     <form method="get" action="">
+        <div class="filter-group search-group">
+            <label>Пошук</label>
+            <div class="search-input-wrapper">
+                <input type="text" name="search" value="{{ current_search }}"
+                       placeholder="Назва товару..." class="search-input">
+                {% if current_search %}
+                    <button type="button" class="search-clear" onclick="this.previousElementSibling.value='';this.closest('form').submit()">✕</button>
+                {% endif %}
+            </div>
+        </div>
         <div class="filter-group">
             <label>Категорія</label>
             <select name="category">
@@ -37,6 +68,17 @@
             </select>
         </div>
         <div class="filter-group">
+            <label>Колір</label>
+            <select name="color">
+                <option value="">Усі</option>
+                {% for color_val in available_colors %}
+                    <option value="{{ color_val }}" {% if current_color == color_val %}selected{% endif %}>
+                        {{ color_val }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
             <label>Сортування</label>
             <select name="sort">
                 {% for key, val in sort_options.items %}
@@ -53,23 +95,33 @@
 <div class="product-grid">
     {% for product in page_obj %}
         {% with first_variant=product.variants.all.0 %}
-        <div class="card-wrapper">
+        {% with is_out=product.total_stock|default:0 %}
+        <div class="card-wrapper {% if not product.total_stock %}card-wrapper--out{% endif %}">
             <a href="{% url 'product_detail' product.pk %}" class="card">
                 {% if first_variant.image %}
                     <img src="{{ first_variant.image.url }}" alt="{{ product.title }}">
+                {% else %}
+                    <div class="card-img-placeholder"></div>
+                {% endif %}
+                {% if not product.total_stock %}
+                    <span class="card-out-label">Немає в наявності</span>
                 {% endif %}
                 <div class="card-body">
                     <h2>{{ product.title }}</h2>
                     <p class="card-price">
-                        {% if product.min_price %}{{ product.min_price }} грн{% else %}—{% endif %}
+                        {% if product.min_price %}від {{ product.min_price }} грн{% else %}—{% endif %}
                     </p>
                 </div>
             </a>
             <div class="card-actions">
-                {% if first_variant %}
+                {% if product.total_stock %}
                     <button class="btn-add-cart" data-pk="{{ first_variant.pk }}">До кошика</button>
                 {% else %}
-                    <button class="btn-add-cart" disabled>Немає в наявності</button>
+                    <button class="btn-watch {% if product.pk in watch_ids %}btn-watch--active{% endif %}"
+                            data-pk="{{ product.pk }}"
+                            data-url="{% url 'watch_toggle' product.pk %}">
+                        {% if product.pk in watch_ids %}Відстежується ✓{% else %}Відстежити{% endif %}
+                    </button>
                 {% endif %}
                 <button class="btn-fav {% if product.pk in favorite_ids %}btn-fav--active{% endif %}"
                         data-pk="{{ product.pk }}"
@@ -84,6 +136,7 @@
                 </button>
             </div>
         </div>
+        {% endwith %}
         {% endwith %}
     {% empty %}
         <p class="empty-message">Товарів не знайдено.</p>

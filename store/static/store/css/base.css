@@ -19,3 +19,36 @@ h1 {
     margin-bottom: 20px;
     font-size: 28px;
 }
+
+/* Breadcrumbs */
+.breadcrumbs {
+    width: 90%;
+    max-width: 1200px;
+    margin: 12px auto 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.breadcrumbs a {
+    color: #aaa;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.breadcrumbs a:hover {
+    color: #fff;
+}
+
+.breadcrumb-sep {
+    color: #555;
+    font-size: 12px;
+    margin: 0 2px;
+}
+
+.breadcrumbs span:last-child {
+    color: #ccc;
+}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'store/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-content">
+        <p class="hero-label">Новий сезон 2025</p>
+        <h1 class="hero-title">Стиль, що<br>говорить сам за себе</h1>
+        <p class="hero-sub">Одяг для тих, хто цінує якість і мінімалізм.</p>
+        <div class="hero-btns">
+            <a href="{% url 'product_list' %}" class="btn-hero-primary">Переглянути каталог</a>
+        </div>
+    </div>
+</section>
+
+{% if featured %}
+<section class="home-section">
+    <div class="home-section-header">
+        <h2 class="home-section-title">Нові надходження</h2>
+        <a href="{% url 'product_list' %}" class="home-see-all">Всі товари →</a>
+    </div>
+    <div class="product-grid">
+        {% for product in featured %}
+        {% with first_variant=product.variants.all.0 %}
+        <div class="card-wrapper">
+            <a href="{% url 'product_detail' product.pk %}" class="card">
+                {% if first_variant.image %}
+                    <img src="{{ first_variant.image.url }}" alt="{{ product.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h2>{{ product.title }}</h2>
+                    <p class="card-price">
+                        {% if product.min_price %}від {{ product.min_price }} грн{% else %}—{% endif %}
+                    </p>
+                </div>
+            </a>
+            <div class="card-actions">
+                {% if first_variant %}
+                    <button class="btn-add-cart" data-pk="{{ first_variant.pk }}">До кошика</button>
+                {% endif %}
+                <button class="btn-fav {% if product.pk in favorite_ids %}btn-fav--active{% endif %}"
+                        data-pk="{{ product.pk }}"
+                        data-url="{% url 'favorite_toggle' product.pk %}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06
+                                 a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78
+                                 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

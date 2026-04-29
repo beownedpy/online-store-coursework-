@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Реєстрація</span>
+</nav>
+{% endblock %}
 {% block content %}
 <div class="auth-wrapper">
     <div class="auth-card">

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Допомога</span>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="help-wrapper">
+    <h1>Допомога</h1>
+    <div class="help-card">
+        <p class="help-placeholder">Тут скоро з'явиться корисна інформація.</p>
+    </div>
+</div>
+{% endblock %}

@@ -36,7 +36,7 @@ function removeRow(pk, data) {
         const container = document.querySelector('.cart-container');
         if (container) {
             container.innerHTML =
-                '<p class="empty-message">Кошик порожній. <a href="/">Перейти до каталогу</a></p>';
+                '<p class="empty-message">Кошик порожній. <a href="/catalog/">Перейти до каталогу</a></p>';
         }
     }
 }
@@ -46,9 +46,18 @@ document.querySelectorAll('.btn-add-cart').forEach(btn => {
         const pk = btn.dataset.pk;
         const qtyInput = document.querySelector(`.product-qty[data-pk="${pk}"]`);
         const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
-        postCart(`/cart/add/${pk}/`, { quantity }, () => {
+        postCart(`/cart/add/${pk}/`, { quantity }, (data) => {
             btn.textContent = 'Додано ✓';
             setTimeout(() => (btn.textContent = 'До кошика'), 1500);
+
+            // Update qty input on product detail page
+            if (qtyInput && data.stock !== undefined) {
+                const remaining = data.stock - data.in_cart;
+                const newMax = Math.max(remaining, 0);
+                qtyInput.max = newMax;
+                qtyInput.value = newMax > 0 ? Math.min(parseInt(qtyInput.value), newMax) : 0;
+                if (newMax <= 0) btn.disabled = true;
+            }
         });
     });
 });
@@ -83,9 +92,12 @@ document.querySelectorAll('.qty-inc').forEach(btn => {
     btn.addEventListener('click', () => {
         const pk = btn.dataset.pk;
         const input = document.querySelector(`.qty-input[data-pk="${pk}"]`);
-        const newVal = Math.min(99, parseInt(input.value) + 1);
+        const stock = parseInt(input.dataset.stock || 99);
+        const newVal = Math.min(stock, parseInt(input.value) + 1);
         input.value = newVal;
         postCart(`/cart/update/${pk}/`, { quantity: newVal }, data => {
+            // Sync to actual value returned by server (may be capped)
+            input.value = data.quantity ?? newVal;
             const itemTotalEl = document.querySelector(`.item-total[data-pk="${pk}"]`);
             if (itemTotalEl) itemTotalEl.textContent = data.item_total + ' грн';
             recalcTotal(data);
@@ -97,7 +109,8 @@ document.querySelectorAll('.qty-input').forEach(input => {
     input.addEventListener('change', () => {
         const pk = input.dataset.pk;
         const parsed = parseInt(input.value);
-        const newVal = isNaN(parsed) ? 0 : Math.max(0, Math.min(99, parsed));
+        const stock = parseInt(input.dataset.stock || 99);
+        const newVal = isNaN(parsed) ? 0 : Math.max(0, Math.min(stock, parsed));
         input.value = newVal;
 
         if (newVal === 0) {
@@ -126,6 +139,28 @@ function updateFavCount(delta) {
     badge.textContent = next;
     badge.style.display = next > 0 ? 'inline' : 'none';
 }
+
+document.addEventListener('click', function(e) {
+    const watchBtn = e.target.closest('.btn-watch');
+    if (watchBtn) {
+        const url = watchBtn.dataset.url;
+        if (!url) return;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        })
+        .then(function(r) {
+            if (r.status === 401) { window.location.href = '/login/'; return null; }
+            return r.json();
+        })
+        .then(function(data) {
+            if (!data) return;
+            watchBtn.classList.toggle('btn-watch--active', data.watching);
+            watchBtn.textContent = data.watching ? 'Відстежується ✓' : 'Відстежити';
+        });
+        return;
+    }
+});
 
 document.addEventListener('click', function(e) {
     const btn = e.target.closest('.btn-fav');

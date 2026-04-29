@@ -13,11 +13,13 @@ class Cart:
 
     def add(self, variant, quantity=1):
         vid = str(variant.pk)
-        if vid not in self.cart:
-            self.cart[vid] = 0
-        self.cart[vid] += quantity
-        if self.cart[vid] <= 0:
-            del self.cart[vid]
+        current = self.cart.get(vid, 0)
+        new_qty = min(current + quantity, variant.stock)
+        if new_qty <= 0:
+            if vid in self.cart:
+                del self.cart[vid]
+        else:
+            self.cart[vid] = new_qty
         self._save()
 
     def update(self, variant, quantity):
@@ -25,7 +27,7 @@ class Cart:
         if quantity <= 0:
             self.remove(variant)
             return
-        self.cart[vid] = quantity
+        self.cart[vid] = min(quantity, variant.stock)
         self._save()
 
     def remove(self, variant):

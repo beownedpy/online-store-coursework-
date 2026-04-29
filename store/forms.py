@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 User = get_user_model()
 
 _EMAIL_RE = re.compile(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
+_PHONE_RE = re.compile(r'^\+380\d{9}$')
 
 
 class RegisterForm(forms.Form):
@@ -53,12 +54,49 @@ class ProfileForm(forms.Form):
     first_name = forms.CharField(max_length=150, required=False, label="Ім'я")
     last_name  = forms.CharField(max_length=150, required=False, label='Прізвище')
     gender     = forms.ChoiceField(choices=GENDER_CHOICES, required=False, label='Стать')
-    phone      = forms.CharField(max_length=20, required=False, label='Номер телефону')
+    phone      = forms.CharField(max_length=13, required=False, label='Номер телефону')
     address    = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Вулиця, будинок, квартира, місто'}),
         required=False,
         label='Адреса доставки',
     )
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone', '').strip()
+        if not phone:
+            return ''
+        if not _PHONE_RE.match(phone):
+            raise ValidationError('Введіть коректний номер у форматі +380XXXXXXXXX (9 цифр після +380).')
+        return phone
+
+
+class CheckoutForm(forms.Form):
+    PAYMENT_CHOICES = [
+        ('card',   'Карткою онлайн'),
+        ('cash',   'Готівкою при отриманні'),
+        ('postal', 'Накладний платіж'),
+    ]
+
+    first_name = forms.CharField(max_length=100, label="Ім'я")
+    last_name  = forms.CharField(max_length=100, label='Прізвище')
+    email      = forms.EmailField(label='Email')
+    phone      = forms.CharField(max_length=20, label='Телефон')
+    city       = forms.CharField(max_length=100, label='Місто')
+    address    = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Вулиця, будинок, квартира / відділення Нової Пошти'}),
+        label='Адреса / відділення',
+    )
+    payment = forms.ChoiceField(choices=PAYMENT_CHOICES, label='Спосіб оплати', widget=forms.RadioSelect)
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Необов\'язково'}),
+        required=False, label='Коментар до замовлення',
+    )
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone', '').strip()
+        if not _PHONE_RE.match(phone):
+            raise ValidationError('Введіть номер у форматі +380XXXXXXXXX')
+        return phone
 
 
 class ChangePasswordForm(forms.Form):

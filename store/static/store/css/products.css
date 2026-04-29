@@ -19,15 +19,50 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
+/* ── Out-of-stock card ── */
+.card-wrapper--out {
+    opacity: 0.5;
+    filter: grayscale(0.55);
+}
+
+.card-wrapper--out:hover {
+    transform: none;
+    box-shadow: none;
+    opacity: 0.65;
+    filter: grayscale(0.3);
+}
+
 .card {
     display: block;
     flex: 1;
+    position: relative;
 }
 
 .card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
+}
+
+.card-img-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #1a1a1a;
+}
+
+.card-out-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    color: #888;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    pointer-events: none;
 }
 
 .card-body {
@@ -93,7 +128,36 @@
     background: #004999;
 }
 
-/* ── Кнопка серця ── */
+/* ── Watch / Track button ── */
+.btn-watch {
+    flex: 1;
+    padding: 12px 0;
+    margin: 0;
+    background: transparent;
+    color: #666;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.btn-watch:hover {
+    color: #ccc;
+    background: #1f1f1f;
+}
+
+.btn-watch--active {
+    color: #0070f3;
+}
+
+.btn-watch--active:hover {
+    color: #4d9fff;
+    background: #111c2a;
+}
+
 .btn-fav {
     width: 44px;
     display: flex;
@@ -133,7 +197,6 @@
     stroke: #e63946;
 }
 
-/* ── Порожній стан (обране / кошик) ── */
 .empty-state {
     text-align: center;
     padding: 80px 0;
@@ -161,7 +224,6 @@
     background: #005bb5;
 }
 
-/* ── Сторінка деталей товару ── */
 .product-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -177,11 +239,145 @@
     align-self: start;
 }
 
-.detail-image {
+/* ── Carousel ── */
+.carousel {
+    position: relative;
     width: 100%;
+    max-width: 460px;
     border-radius: 12px;
-    object-fit: cover;
+    overflow: hidden;
     background: #1a1a1a;
+    aspect-ratio: 1 / 1;
+    user-select: none;
+}
+
+.carousel-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.carousel-img--active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.carousel-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 14px;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    padding: 0;
+}
+
+.carousel-btn:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    min-height: 14px;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #444;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-dot--active {
+    background: #0070f3;
+    transform: scale(1.3);
+}
+
+/* ── Color buttons ── */
+.color-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.color-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-color {
+    padding: 6px 14px;
+    border: 2px solid #444;
+    border-radius: 20px;
+    background: transparent;
+    color: #ccc;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-color:hover {
+    border-color: #888;
+    color: #fff;
+}
+
+.btn-color--active {
+    border-color: #0070f3 !important;
+    background: #0070f3 !important;
+    color: #fff !important;
+}
+
+#selected-color-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .detail-info {
@@ -311,6 +507,11 @@
     color: #ef4444;
 }
 
+.stock-low {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+}
+
 .cart-actions {
     display: flex;
     align-items: center;
@@ -329,7 +530,6 @@
 .qty-btn {
     width: 38px;
     height: 44px;
-    background: #222;
     color: #fff;
     border: none;
     font-size: 20px;
@@ -361,6 +561,42 @@
     -webkit-appearance: none;
 }
 
+.btn-watch-detail {
+    padding: 0 24px;
+    height: 44px;
+    background: transparent;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #444;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    letter-spacing: 0.3px;
+}
+
+.btn-watch-detail:hover {
+    color: #ccc;
+    border-color: #777;
+}
+
+.btn-watch-detail.btn-watch--active {
+    color: #0070f3;
+    border-color: #0070f3;
+}
+
+.btn-watch-detail.btn-watch--active:hover {
+    color: #4d9fff;
+    border-color: #4d9fff;
+}
+
+.low-stock-msg {
+    font-size: 12px;
+    color: #f59e0b;
+    font-weight: 500;
+    margin: 0;
+}
+
 .btn-back {
     display: inline-block;
     margin-top: 4px;
@@ -383,7 +619,6 @@
     }
 }
 
-/* ── Іконка людини в навбарі ── */
 .nav-icon {
     display: flex;
     align-items: center;

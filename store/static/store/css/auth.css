@@ -133,7 +133,6 @@
     background: #ddd;
 }
 
-/* ── Navbar auth buttons ── */
 .fav-link {
     position: relative;
 }
@@ -159,7 +158,6 @@
     font-weight: 600;
 }
 
-/* ── Profile page ── */
 .profile-header {
     display: flex;
     align-items: center;
@@ -270,4 +268,161 @@
 
 .btn-submit:hover {
     background: #ddd;
+}
+
+/* ── Profile dropdown ── */
+.nav-profile-wrap {
+    position: relative;
+}
+
+.nav-profile-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    color: #ccc;
+    transition: color 0.15s;
+}
+
+.nav-profile-btn:hover {
+    color: #fff;
+}
+
+.nav-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 210px;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 6px 0;
+    z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.nav-profile-wrap--open .nav-dropdown {
+    display: block;
+}
+
+.nav-dropdown-header {
+    padding: 10px 16px 8px;
+    font-size: 0.78rem;
+    color: #666;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-dropdown-item:hover {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.nav-dropdown-item svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.nav-dropdown-divider {
+    height: 1px;
+    background: #2a2a2a;
+    margin: 4px 0;
+}
+
+.nav-dropdown-item--danger {
+    color: #e07070;
+}
+
+.nav-dropdown-item--danger:hover {
+    background: #2a1a1a;
+    color: #e63946;
+}
+
+/* ── Phone input ── */
+.phone-input-wrap {
+    display: flex;
+    align-items: center;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.phone-input-wrap:focus-within {
+    border-color: #888;
+}
+
+.phone-prefix {
+    padding: 10px 10px 10px 12px;
+    color: #aaa;
+    font-size: 0.95rem;
+    user-select: none;
+    white-space: nowrap;
+    border-right: 1px solid #444;
+}
+
+.phone-code-select {
+    background: transparent;
+    border: none;
+    border-right: 1px solid #444;
+    color: #aaa;
+    font-size: 0.95rem;
+    padding: 10px 8px 10px 12px;
+    outline: none;
+    cursor: pointer;
+    appearance: auto;
+    white-space: nowrap;
+}
+
+.phone-code-select option {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.phone-input-wrap input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 0.95rem;
+    outline: none;
+    min-width: 0;
+}
+
+/* ── Help page ── */
+.help-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.help-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 36px 40px;
+    margin-top: 8px;
+}
+
+.help-placeholder {
+    color: #666;
+    font-size: 0.95rem;
 }

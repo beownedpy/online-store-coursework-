@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Замовлення прийнято</span>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="success-wrap">
+    <div class="success-icon">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none"
+             stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="9 12 11 14 15 10"/>
+        </svg>
+    </div>
+    <h1 class="success-title">Дякуємо за замовлення!</h1>
+    <p class="success-sub">Замовлення <strong>#{{ order.pk }}</strong> успішно прийнято.</p>
+    <p class="success-sub">Ми надішлемо підтвердження на <strong>{{ order.email }}</strong>.</p>
+
+    <div class="success-details">
+        <div class="success-row"><span>Отримувач:</span><span>{{ order.first_name }} {{ order.last_name }}</span></div>
+        <div class="success-row"><span>Телефон:</span><span>{{ order.phone }}</span></div>
+        <div class="success-row"><span>Місто:</span><span>{{ order.city }}</span></div>
+        <div class="success-row"><span>Адреса:</span><span>{{ order.address }}</span></div>
+        <div class="success-row"><span>Оплата:</span><span>{{ order.get_payment_display }}</span></div>
+        <div class="success-row success-row--total"><span>Сума:</span><strong>{{ order.total_price }} грн</strong></div>
+    </div>
+
+    <div class="success-actions">
+        <a href="{% url 'product_list' %}" class="btn-checkout">Продовжити покупки</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'order_history' %}" class="btn-continue">Мої замовлення</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

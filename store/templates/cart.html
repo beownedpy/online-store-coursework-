@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Кошик</span>
+</nav>
+{% endblock %}
 {% block content %}
 <h1>Кошик</h1>
 
@@ -20,7 +27,7 @@
             <tr class="cart-row" data-pk="{{ item.variant.pk }}">
                 <td class="cart-product-info">
                     {% if item.variant.image %}
-                        <img src="{{ item.variant.image.url }}" alt="{{ item.product.title }}" width="60" height="60">
+                        <img src="{{ item.variant.image.url }}" alt="{{ item.product.title }}">
                     {% endif %}
                     <a href="{% url 'product_detail' item.product.pk %}">{{ item.product.title }}</a>
                 </td>
@@ -29,13 +36,28 @@
                 <td>
                     <div class="qty-control">
                         <button class="qty-btn qty-dec" data-pk="{{ item.variant.pk }}">−</button>
-                        <input class="qty-input" type="number" value="{{ item.quantity }}" min="0" max="99" data-pk="{{ item.variant.pk }}">
-                        <button class="qty-btn qty-inc" data-pk="{{ item.variant.pk }}">+</button>
+                        <input class="qty-input" type="number"
+                               value="{{ item.quantity }}"
+                               min="0"
+                               max="{{ item.variant.stock }}"
+                               data-pk="{{ item.variant.pk }}"
+                               data-stock="{{ item.variant.stock }}">
+                        <button class="qty-btn qty-inc" data-pk="{{ item.variant.pk }}" data-stock="{{ item.variant.stock }}">+</button>
                     </div>
                 </td>
                 <td class="item-total" data-pk="{{ item.variant.pk }}">{{ item.total_price }} грн</td>
                 <td>
-                    <button class="btn-remove" data-pk="{{ item.variant.pk }}">Видалити</button>
+                    <button class="btn-remove" data-pk="{{ item.variant.pk }}">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            <path d="M10 11v6M14 11v6"/>
+                            <path d="M9 6V4h6v2"/>
+                        </svg>
+                        Видалити
+                    </button>
                 </td>
             </tr>
             {% endfor %}
@@ -43,9 +65,24 @@
     </table>
 
     <div class="cart-footer">
-        <span>Загальна сума:</span>
-        <strong id="cart-total">{{ cart.get_total_price }} грн</strong>
-        <a href="{% url 'product_list' %}" class="btn-reset">← Продовжити покупки</a>
+        <a href="{% url 'product_list' %}" class="btn-continue">
+            ← Продовжити покупки
+        </a>
+        <div class="cart-footer-right">
+            <div class="cart-total-row">
+                <span>Загальна сума:</span>
+                <strong id="cart-total">{{ cart.get_total_price }} грн</strong>
+            </div>
+            <a href="{% url 'checkout' %}" class="btn-checkout">
+                Оформити замовлення
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
     </div>
 </div>
 {% else %}

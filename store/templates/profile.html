@@ -1,4 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <a href="{% url 'home' %}">Головна</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Особистий кабінет</span>
+</nav>
+{% endblock %}
 {% block content %}
 <div class="profile-wrapper">
     <div class="profile-header">
@@ -48,10 +56,19 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <label for="id_phone">Номер телефону</label>
-                    <input type="tel" name="phone" id="id_phone"
-                           value="{{ profile_form.phone.value|default:'' }}"
-                           placeholder="+380 XX XXX XX XX">
+                    <label for="id_phone_suffix">Номер телефону</label>
+                    <div class="phone-input-wrap">
+                        <select id="id_phone_code" class="phone-code-select" aria-label="Код країни">
+                            <option value="+380">🇺🇦 +380</option>
+                        </select>
+                        <input type="tel" id="id_phone_suffix"
+                               inputmode="numeric"
+                               autocomplete="off"
+                               placeholder="XX XXX XX XX"
+                               data-saved="{{ profile_form.phone.value|default:'' }}">
+                    </div>
+                    <div id="phone-error" class="field-errors" style="display:none;"></div>
+                    <input type="hidden" name="phone" id="id_phone">
                     {% if profile_form.phone.errors %}
                         <div class="field-errors">{{ profile_form.phone.errors.0 }}</div>
                     {% endif %}
@@ -110,4 +127,8 @@
 
     <a href="{% url 'product_list' %}" class="btn-reset">← Повернутись до магазину</a>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'store/js/phone.js' %}"></script>
 {% endblock %}
